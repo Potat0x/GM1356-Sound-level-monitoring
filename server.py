@@ -1,6 +1,7 @@
 import socket
 import sys
 from socket import SOL_SOCKET, SO_REUSEADDR
+import json
 
 
 def client_name(addr):
@@ -32,6 +33,30 @@ def bind_socket(s, port):
         sys.exit()
 
 
+def receive_readings(connection, address):
+    tmp_json = ""
+    while True:
+        received = connection.recv(1)
+
+        if received == b'':
+            log_error(client_name(address) + " disconnected")
+            connection.close()
+            break
+
+        received_text = received.decode('utf-8')
+        # print("-> " + x)
+        if received_text == "{":
+            tmp_json = "{"
+        elif received_text == "}":
+            tmp_json = tmp_json + "}"
+            print("->" + tmp_json)
+            jp = json.loads(tmp_json)
+            print("   " + str(jp))
+            tmp_json = ""
+        else:
+            tmp_json = tmp_json + received_text
+
+
 def start_server(port):
     s = create_socket()
     bind_socket(s, port)
@@ -43,14 +68,7 @@ def start_server(port):
         log_info("waiting for client")
         connection, address = s.accept()
         log_info("client connected: " + client_name(address))
-        while True:
-            r = connection.recv(256)
-            if r == b'':
-                log_error(client_name(address) + " disconnected")
-                connection.close()
-                break
-
-            print("-> " + r.decode('utf-8').strip())
+        receive_readings(connection, address)
 
 
 start_server(2389)
