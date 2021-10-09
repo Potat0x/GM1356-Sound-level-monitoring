@@ -68,12 +68,8 @@
 #define A_E_EMPTY                   -4
 #define A_E_TIMEOUT                 -5
 
-<<<<<<< HEAD
 const char *gm1356_range_str[] =
 {
-=======
-const char *gm1356_range_str[] = {
->>>>>>> a6b51e2... Fix format string issue on 32-bit
     "30-130",
     "30-80",
     "50-100",
@@ -84,20 +80,15 @@ const char *gm1356_range_str[] = {
 /*
  * Configuration items, taken from the command line
  */
-static
-bool fast_mode = false;
+static bool fast_mode = false;
 
-static
-bool measure_dbc = false;
+static bool measure_dbc = false;
 
-static
-unsigned config_range = GM1356_RANGE_30_130_DB;
+static unsigned config_range = GM1356_RANGE_30_130_DB;
 
-static
-uint64_t interval_ms = 500ul;
+static uint64_t interval_ms = 500ul;
 
-static
-wchar_t *config_serial = NULL;
+static wchar_t *config_serial = NULL;
 
 /*
  * App state - whether or not we've been asked to terminate
@@ -105,15 +96,10 @@ wchar_t *config_serial = NULL;
 static volatile
 bool running = true;
 
-static
-void _sigint_handler(int signal)
+static void _sigint_handler(int signal)
 {
-<<<<<<< HEAD
     if (false == running)
     {
-=======
-    if (false == running) {
->>>>>>> a6b51e2... Fix format string issue on 32-bit
         fprintf(stderr, "User insisted we exit promptly (signal = %d), goodbye.", signal);
         exit(EXIT_FAILURE);
     }
@@ -121,25 +107,19 @@ void _sigint_handler(int signal)
     running = false;
 }
 
-static
-uint64_t get_time_ns(void)
+static uint64_t get_time_ns(void)
 {
     struct timespec ts;
     clock_gettime(CLOCK_REALTIME, &ts);
     return (uint64_t)ts.tv_sec *  1000000000ull + ts.tv_nsec;
 }
 
-static
-int splread_find_device(hid_device **pdev, uint16_t vid, uint16_t pid, wchar_t const *serial)
+static int splread_find_device(hid_device **pdev, uint16_t vid, uint16_t pid, wchar_t const *serial)
 {
     int ret = A_OK;
 
     struct hid_device_info *devs = NULL,
-<<<<<<< HEAD
                                 *cur_dev = NULL;
-=======
-                           *cur_dev = NULL;
->>>>>>> a6b51e2... Fix format string issue on 32-bit
     hid_device *dev = NULL;
     size_t nr_devs = 0;
     uint16_t tgt_pid = 0,
@@ -150,19 +130,14 @@ int splread_find_device(hid_device **pdev, uint16_t vid, uint16_t pid, wchar_t c
     *pdev = NULL;
 
     devs = hid_enumerate(vid, pid);
-<<<<<<< HEAD
     if (NULL == devs)
     {
-=======
-    if (NULL == devs) {
->>>>>>> a6b51e2... Fix format string issue on 32-bit
         SPL_MSG(SEV_INFO, "NO-DEVICE", "Could not find devices of type %04x:%04x", vid, pid);
         ret = A_E_NOTFOUND;
         goto done;
     }
 
     cur_dev = devs;
-<<<<<<< HEAD
     while (NULL != cur_dev)
     {
         SPL_MSG(SEV_INFO, "DEVICE", "Device found: %04hx:%04hx path: %s serial: %ls",
@@ -173,26 +148,13 @@ int splread_find_device(hid_device **pdev, uint16_t vid, uint16_t pid, wchar_t c
             /* Only count devices where the serial number matches */
             if (0 == wcscmp(serial, cur_dev->serial_number))
             {
-=======
-    while (NULL != cur_dev) {
-        SPL_MSG(SEV_INFO, "DEVICE", "Device found: %04hx:%04hx path: %s serial: %ls",
-                cur_dev->vendor_id, cur_dev->product_id, cur_dev->path, cur_dev->serial_number);
-
-        if (NULL != serial) {
-            /* Only count devices where the serial number matches */
-            if (0 == wcscmp(serial, cur_dev->serial_number)) {
->>>>>>> a6b51e2... Fix format string issue on 32-bit
                 tgt_vid = cur_dev->vendor_id;
                 tgt_pid = cur_dev->product_id;
                 nr_devs++;
             }
-<<<<<<< HEAD
         }
         else
         {
-=======
-        } else {
->>>>>>> a6b51e2... Fix format string issue on 32-bit
             /* Just count all the devices we find */
             tgt_vid = cur_dev->vendor_id;
             tgt_pid = cur_dev->product_id;
@@ -202,35 +164,23 @@ int splread_find_device(hid_device **pdev, uint16_t vid, uint16_t pid, wchar_t c
         cur_dev = cur_dev->next;
     }
 
-<<<<<<< HEAD
     if (nr_devs > 1)
     {
-=======
-    if (nr_devs > 1) {
->>>>>>> a6b51e2... Fix format string issue on 32-bit
         SPL_MSG(SEV_ERROR, "MULTIPLE-DEVICES", "Found multiple devices, don't know which one to open, aborting.");
         ret = A_E_INVAL;
         goto done;
     }
 
-<<<<<<< HEAD
     if (0 == nr_devs)
     {
-=======
-    if (0 == nr_devs) {
->>>>>>> a6b51e2... Fix format string issue on 32-bit
         SPL_MSG(SEV_ERROR, "NO-DEVICES", "Found no devices that match criteria, aborting.");
         ret = A_E_EMPTY;
         goto done;
     }
 
     /* Open the HID device */
-<<<<<<< HEAD
     if (NULL == (dev = hid_open(tgt_vid, tgt_pid, serial)))
     {
-=======
-    if (NULL == (dev = hid_open(tgt_vid, tgt_pid, serial))) {
->>>>>>> a6b51e2... Fix format string issue on 32-bit
         SPL_MSG(SEV_ERROR, "CANT-OPEN", "Failed to open device %04x:%04x s/n: %ls - aborting", tgt_vid, tgt_pid, serial);
         ret = A_E_NOTFOUND;
         goto done;
@@ -239,25 +189,16 @@ int splread_find_device(hid_device **pdev, uint16_t vid, uint16_t pid, wchar_t c
     *pdev = dev;
 
 done:
-<<<<<<< HEAD
     if (NULL != devs)
     {
-=======
-    if (NULL != devs) {
->>>>>>> a6b51e2... Fix format string issue on 32-bit
         hid_free_enumeration(devs);
         devs = NULL;
     }
 
-<<<<<<< HEAD
     if (FAILED(ret))
     {
         if (NULL != dev)
         {
-=======
-    if (FAILED(ret)) {
-        if (NULL != dev) {
->>>>>>> a6b51e2... Fix format string issue on 32-bit
             hid_close(dev);
             dev = NULL;
         }
@@ -266,8 +207,7 @@ done:
     return ret;
 }
 
-static
-int splread_send_req(hid_device *dev, uint8_t *report)
+static int splread_send_req(hid_device *dev, uint8_t *report)
 {
     int ret = A_OK;
 
@@ -276,12 +216,8 @@ int splread_send_req(hid_device *dev, uint8_t *report)
     ASSERT_ARG(NULL != dev);
     ASSERT_ARG(NULL != report);
 
-<<<<<<< HEAD
     if (8 != (written = hid_write(dev, report, 8)))
     {
-=======
-    if (8 != (written = hid_write(dev, report, 8))) {
->>>>>>> a6b51e2... Fix format string issue on 32-bit
         SPL_MSG(SEV_ERROR, "REQUEST-FAIL", "Failed to write 8 bytes to device (wrote %d): %ls", written, hid_error(dev));
         ret = A_E_INVAL;
         goto done;
@@ -293,8 +229,7 @@ done:
     return ret;
 }
 
-static
-int splread_read_resp(hid_device *dev, uint8_t *response, size_t response_len, unsigned timeout_ns)
+static int splread_read_resp(hid_device *dev, uint8_t *response, size_t response_len, unsigned timeout_ns)
 {
     int ret = A_OK;
 
@@ -307,17 +242,11 @@ int splread_read_resp(hid_device *dev, uint8_t *response, size_t response_len, u
 
     start_time = get_time_ns();
 
-<<<<<<< HEAD
     while (8 != read_bytes)
     {
         int nr_bytes = 0;
         if (0 > (nr_bytes = hid_read_timeout(dev, &response[read_bytes], response_len + 1 - read_bytes, timeout_ns/1000000ul)))
         {
-=======
-    while (8 != read_bytes) {
-        int nr_bytes = 0;
-        if (0 > (nr_bytes = hid_read_timeout(dev, &response[read_bytes], response_len + 1 - read_bytes, timeout_ns/1000000ul))) {
->>>>>>> a6b51e2... Fix format string issue on 32-bit
             SPL_MSG(SEV_ERROR, "READ-FAIL", "Failed to read back an 8 byte report (got %d): %ls", read_bytes, hid_error(dev));
             ret = A_E_INVAL;
             goto done;
@@ -325,12 +254,8 @@ int splread_read_resp(hid_device *dev, uint8_t *response, size_t response_len, u
 
         read_bytes += nr_bytes;
 
-<<<<<<< HEAD
         if (get_time_ns() - start_time > timeout_ns)
         {
-=======
-        if (get_time_ns() - start_time > timeout_ns) {
->>>>>>> a6b51e2... Fix format string issue on 32-bit
             SPL_MSG(SEV_WARNING, "TIMEOUT", "Timeout waiting for response from device, skipping this read");
             ret = A_E_TIMEOUT;
             goto done;
@@ -353,8 +278,7 @@ done:
     return ret;
 }
 
-static
-int splread_set_config(hid_device *dev, unsigned int range, bool fast, bool dbc)
+static int splread_set_config(hid_device *dev, unsigned int range, bool fast, bool dbc)
 {
     int ret = A_OK;
 
@@ -367,7 +291,6 @@ int splread_set_config(hid_device *dev, unsigned int range, bool fast, bool dbc)
     command[0] = GM1356_COMMAND_CONFIGURE;
     command[1] |= range;
 
-<<<<<<< HEAD
     if (true == fast)
     {
         command[1] |= GM1356_FAST_MODE;
@@ -380,29 +303,14 @@ int splread_set_config(hid_device *dev, unsigned int range, bool fast, bool dbc)
 
     if (FAILED(splread_send_req(dev, command)))
     {
-=======
-    if (true == fast) {
-        command[1] |= GM1356_FAST_MODE;
-    }
-
-    if (true == dbc) {
-        command[1] |= GM1356_MEASURE_DBC;
-    }
-
-    if (FAILED(splread_send_req(dev, command))) {
->>>>>>> a6b51e2... Fix format string issue on 32-bit
         SPL_MSG(SEV_FATAL, "CONFIG-FAIL", "Failed to set configuration for SPL meter, aborting");
         ret = A_E_INVAL;
         goto done;
     }
 
     /* Always wait 500ms for the configuration to succeed */
-<<<<<<< HEAD
     if (FAILED(rret = splread_read_resp(dev, command, sizeof(command), 500ul * 1000ul * 1000ul)))
     {
-=======
-    if (FAILED(rret = splread_read_resp(dev, command, sizeof(command), 500ul * 1000ul * 1000ul))) {
->>>>>>> a6b51e2... Fix format string issue on 32-bit
         SPL_MSG(SEV_FATAL, "CONFIG-NO-ACK", "Did not get the configuration packet acknowledgement, aborting.");
         ret = A_E_INVAL;
         goto done;
@@ -412,8 +320,7 @@ done:
     return ret;
 }
 
-static
-void _print_help(const char *name)
+static void _print_help(const char *name)
 {
     printf("Usage: %s -i [interval ms] [-h] [-f] [-C] [-r {range}] [-S {serial number}]\n", name);
     printf("Where: \n");
@@ -430,23 +337,17 @@ void _print_help(const char *name)
     printf("            80-130\n");
 }
 
-static
-bool _arg_find_range(const char *range_arg, unsigned *prange)
+static bool _arg_find_range(const char *range_arg, unsigned *prange)
 {
     bool found = false;
 
     assert(NULL != prange);
 
     /* Iterate over the supported range values */
-<<<<<<< HEAD
     for (size_t i = 0; i < sizeof(gm1356_range_str)/sizeof(gm1356_range_str[0]); i++)
     {
         if (0 == strcmp(gm1356_range_str[i], range_arg))
         {
-=======
-    for (size_t i = 0; i < sizeof(gm1356_range_str)/sizeof(gm1356_range_str[0]); i++) {
-        if (0 == strcmp(gm1356_range_str[i], range_arg)) {
->>>>>>> a6b51e2... Fix format string issue on 32-bit
             /* Lock in the range value we found */
             *prange = i;
             found = true;
@@ -454,34 +355,24 @@ bool _arg_find_range(const char *range_arg, unsigned *prange)
         }
     }
 
-<<<<<<< HEAD
     if (false == found)
     {
-=======
-    if (false == found) {
->>>>>>> a6b51e2... Fix format string issue on 32-bit
         SPL_MSG(SEV_FATAL, "UNKNOWN-RANGE", "Unknown dB range configuration entry: %s", range_arg);
     }
 
     return found;
 }
 
-static
-void _parse_args(int argc, char *const *argv)
+static void _parse_args(int argc, char *const *argv)
 {
     int a = -1;
 
     size_t serial_len = 0;
 
-<<<<<<< HEAD
     while (-1 != (a = getopt(argc, argv, "i:fCr:S:h")))
     {
         switch (a)
         {
-=======
-    while (-1 != (a = getopt(argc, argv, "i:fCr:S:h"))) {
-        switch (a) {
->>>>>>> a6b51e2... Fix format string issue on 32-bit
         case 'i':
             interval_ms = strtoull(optarg, NULL, 0);
             SPL_MSG(SEV_INFO, "POLL-INTERVAL", "Setting poll interval to %llu milliseconds", (unsigned long long)interval_ms);
@@ -504,12 +395,8 @@ void _parse_args(int argc, char *const *argv)
             break;
 
         case 'r':
-<<<<<<< HEAD
             if (false == _arg_find_range(optarg, &config_range))
             {
-=======
-            if (false == _arg_find_range(optarg, &config_range)) {
->>>>>>> a6b51e2... Fix format string issue on 32-bit
                 /* Don't proceed if we don't have a valid, supported range */
                 exit(EXIT_FAILURE);
             }
@@ -536,22 +423,14 @@ int main(int argc, char *const *argv)
     SPL_MSG(SEV_INFO, "STARTUP", "Starting the Chinese SPL Meter Reader");
 
     /* Catch SIGINT */
-<<<<<<< HEAD
     if (0 > sigaction(SIGINT, &sa, NULL))
     {
-=======
-    if (0 > sigaction(SIGINT, &sa, NULL)) {
->>>>>>> a6b51e2... Fix format string issue on 32-bit
         SPL_MSG(SEV_FATAL, "STARTUP", "Failed to set up SIGINT handler, bizarre. Aborting.");
         exit(EXIT_FAILURE);
     }
 
-<<<<<<< HEAD
     if (0 > sigaction(SIGTERM, &sa, NULL))
     {
-=======
-    if (0 > sigaction(SIGTERM, &sa, NULL)) {
->>>>>>> a6b51e2... Fix format string issue on 32-bit
         SPL_MSG(SEV_FATAL, "STARTUP", "Failed to set up SIGTERM handler, bizarre. Aborting.");
         exit(EXIT_FAILURE);
     }
@@ -560,50 +439,33 @@ int main(int argc, char *const *argv)
     _parse_args(argc, argv);
 
     /* Search for the first connected device. TODO: suport Serial as an argument, a */
-<<<<<<< HEAD
     if (FAILED(splread_find_device(&dev, GM1356_SPLMETER_VID, GM1356_SPLMETER_PID, NULL)))
     {
-=======
-    if (FAILED(splread_find_device(&dev, GM1356_SPLMETER_VID, GM1356_SPLMETER_PID, NULL))) {
->>>>>>> a6b51e2... Fix format string issue on 32-bit
         goto done;
     }
 
     DIAG("HID device: %p", dev);
 
     /* Set the configuration we just read in */
-<<<<<<< HEAD
     if (FAILED(splread_set_config(dev, config_range, fast_mode, measure_dbc)))
     {
-=======
-    if (FAILED(splread_set_config(dev, config_range, fast_mode, measure_dbc))) {
->>>>>>> a6b51e2... Fix format string issue on 32-bit
         SPL_MSG(SEV_FATAL, "BAD-CONFIG", "Failed to load configuration, aborting.");
         goto done;
     }
 
-<<<<<<< HEAD
     do
     {
-=======
-    do {
->>>>>>> a6b51e2... Fix format string issue on 32-bit
         int tret = A_OK;
         uint8_t report[8] = { GM1356_COMMAND_CAPTURE };
 
         /* Send a capture/trigger command */
-<<<<<<< HEAD
         if (FAILED(splread_send_req(dev, report)))
         {
-=======
-        if (FAILED(splread_send_req(dev, report))) {
->>>>>>> a6b51e2... Fix format string issue on 32-bit
             SPL_MSG(SEV_FATAL, "BAD-REQ", "Failed to send read data request");
             goto done;
         }
 
         /* Read the response; if we time out, just fire up the loop again */
-<<<<<<< HEAD
         if (FAILED(tret = splread_read_resp(dev, report, sizeof(report), interval_ms * 1000000ull)))
         {
             if (A_E_TIMEOUT != tret)
@@ -618,16 +480,6 @@ int main(int argc, char *const *argv)
         }
         else
         {
-=======
-        if (FAILED(tret = splread_read_resp(dev, report, sizeof(report), interval_ms * 1000000ull))) {
-            if (A_E_TIMEOUT != tret) {
-                SPL_MSG(SEV_FATAL, "BAD-RESP", "Did not get response, aborting.");
-                goto done;
-            } else {
-                continue;
-            }
-        } else {
->>>>>>> a6b51e2... Fix format string issue on 32-bit
             uint16_t deci_db = report[0] << 8 | report[1];
             uint8_t flags = report[2],
                     range_v = report[2] & 0xf;
@@ -639,11 +491,7 @@ int main(int argc, char *const *argv)
                     flags & GM1356_MEASURE_DBC ? 'C' : 'A',
                     flags & GM1356_FAST_MODE ? "FAST" : "SLOW",
                     range > 0x4 ? "UNKNOWN" : gm1356_range_str[range_v]
-<<<<<<< HEAD
                    );
-=======
-                    );
->>>>>>> a6b51e2... Fix format string issue on 32-bit
 #endif
 
             fprintf(stdout, "{\"measured\":%4.2f,\"mode\":\"%s\",\"freqMode\":\"%s\","
@@ -659,7 +507,6 @@ int main(int argc, char *const *argv)
 
         /* Sleep until the next measurement interval */
         usleep(interval_ms * 1000ul);
-<<<<<<< HEAD
     }
     while (true == running);
 
@@ -667,16 +514,8 @@ int main(int argc, char *const *argv)
 done:
     if (NULL != dev)
     {
-=======
-    } while (true == running);
-
-    ret = EXIT_SUCCESS;
-done:
-    if (NULL != dev) {
->>>>>>> a6b51e2... Fix format string issue on 32-bit
         hid_close(dev);
     }
 
     return ret;
 }
-
