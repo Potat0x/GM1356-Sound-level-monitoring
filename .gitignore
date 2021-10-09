@@ -1,0 +1,8 @@
+*.sw*
+*.o
+*.d
+splread
+bin/
+gm1356.depend
+gm1356.layout
+
