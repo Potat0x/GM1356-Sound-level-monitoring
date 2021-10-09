@@ -495,12 +495,13 @@ int main(int argc, char *const *argv)
 #endif
 
             fprintf(stdout, "{\"measured\":%4.2f,\"mode\":\"%s\",\"freqMode\":\"%s\","
-                    "\"range\":\"%s\",\"timestamp\":\"%04i-%02i-%02i %02i:%02i:%02i UTC\"}\n",
+                    "\"range\":\"%s\",\"datetime\":\"%04i-%02i-%02i %02i:%02i:%02i UTC\", \"timestamp\":\"%ld\"}\n",
                     (double)deci_db/10.0,
                     flags & GM1356_FAST_MODE ? "fast" : "slow",
                     flags & GM1356_MEASURE_DBC ? "dBC" : "dBA",
                     range_v > 0x4 ? "UNKNOWN" : gm1356_range_str[range_v],
-                    gmt->tm_year + 1900, gmt->tm_mon + 1, gmt->tm_mday, gmt->tm_hour, gmt->tm_min, gmt->tm_sec
+                    gmt->tm_year + 1900, gmt->tm_mon + 1, gmt->tm_mday, gmt->tm_hour, gmt->tm_min, gmt->tm_sec,
+                    time(NULL)
                    );
             fflush(stdout);
         }
