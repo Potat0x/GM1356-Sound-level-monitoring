@@ -32,7 +32,7 @@ Init database
 docker run --rm --name spl_mysql -p 13306:3306 -e MYSQL_ALLOW_EMPTY_PASSWORD=Y mysql
 docker exec -it spl_mysql bash
 
-docker exec -it spl_mysql bash
+docker exec -it gm1356_gm1356_monitoring_db_1 bash
 
 mysql
 show databases;

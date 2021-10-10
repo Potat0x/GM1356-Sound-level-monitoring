@@ -1,0 +1,11 @@
+version: '3.2'
+services:
+    gm1356_monitoring_db:
+      image: mysql
+      restart: on-failure
+      environment:
+        MYSQL_ALLOW_EMPTY_PASSWORD: "true"
+      ports:
+        - "13306:3306"
+      volumes:
+        - ./mysql-init:/docker-entrypoint-initdb.d
