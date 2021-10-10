@@ -2,6 +2,7 @@ import socket
 import sys
 from socket import SOL_SOCKET, SO_REUSEADDR
 import json
+from db_inserter import insert_reading
 
 
 def client_name(addr):
@@ -33,7 +34,7 @@ def bind_socket(s, port):
         sys.exit()
 
 
-def receive_readings(connection, address):
+def receive_readings(connection, address, callback):
     tmp_json = ""
     while True:
         received = connection.recv(1)
@@ -51,6 +52,7 @@ def receive_readings(connection, address):
             tmp_json = tmp_json + "}"
             print("->" + tmp_json)
             jp = json.loads(tmp_json)
+            callback(jp["measured"], jp["timestamp"])
             print("   " + str(jp))
             tmp_json = ""
         else:
@@ -68,7 +70,7 @@ def start_server(port):
         log_info("waiting for client")
         connection, address = s.accept()
         log_info("client connected: " + client_name(address))
-        receive_readings(connection, address)
+        receive_readings(connection, address, insert_reading)
 
 
 start_server(2389)
