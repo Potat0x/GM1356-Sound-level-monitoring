@@ -1,0 +1,22 @@
+{
+  "id": 1,
+  "orgId": 1,
+  "name": "GM1356_monitoring_MySQL_source",
+  "type": "mysql",
+  "typeName": "MySQL",
+  "typeLogoUrl": "public/app/plugins/datasource/mysql/img/mysql_logo.svg",
+  "access": "proxy",
+  "url": "gm1356_monitoring_db:3306",
+  "user": "grafana",
+  "password": "grafana",
+  "secureJsonData": {
+    "password": "grafana"
+  },
+  "database": "gm1356_monitoring",
+  "basicAuth": false,
+  "isDefault": true,
+  "jsonData": {
+    "tlsSkipVerify": true
+  },
+  "readOnly": false
+}

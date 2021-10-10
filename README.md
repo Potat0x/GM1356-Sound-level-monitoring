@@ -1,4 +1,4 @@
-## GM1356 Monitoring
+## GM1356 Sound level monitoring
 
 Set of tool that allows:
 - measure sound level
