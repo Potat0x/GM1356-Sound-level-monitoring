@@ -1,5 +1,6 @@
 version: '3.2'
 services:
+    
     gm1356_monitoring_db:
       image: mysql
       restart: on-failure
@@ -9,3 +10,9 @@ services:
         - "13306:3306"
       volumes:
         - ./mysql-init:/docker-entrypoint-initdb.d
+    
+    gm1356_monitoring_grafana:
+      image: grafana/grafana
+      restart: on-failure
+      ports:
+        - "13000:3000"
