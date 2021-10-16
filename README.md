@@ -28,10 +28,10 @@ make
 docker-compose up
 
 # Init Grafana datasource and dashboard (use it only for the first launch)
-./grafana_init.sh
+(cd grafana-init; ./init.sh)
 
 # Start server that receives readings on port 2389 and saves it to database
-python3 server.py
+python3 server/server.py
 
 # Run splread in infinite loop and send readings from stdout to server
 sudo ./infinity-splread.sh | nc localhost 2389

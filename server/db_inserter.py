@@ -15,9 +15,7 @@ cursor.execute("select * from readings union select 'test', 'ok';")
 for x in cursor:
     print(x)
 
-
 def insert_reading(value, timestamp):
     sql = "insert into readings (_value, _timestamp) VALUES (%s, %s);"
     cursor.execute(sql, (value, timestamp))
     db.commit()
-

@@ -1,5 +1,5 @@
 yellow='\033[1;33m'
-no_color='\033[0m' # No Color
+no_color='\033[0m'
 
 while true
 do
