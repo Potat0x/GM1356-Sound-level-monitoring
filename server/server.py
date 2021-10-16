@@ -3,18 +3,13 @@ import sys
 from socket import SOL_SOCKET, SO_REUSEADDR
 import json
 from db_inserter import insert_reading
+from logger import log_info, log_error
+
+port = 2389
 
 
 def client_name(addr):
     return addr[0] + ":" + str(addr[1])
-
-
-def log_info(message):
-    print("[info] " + message)
-
-
-def log_error(message):
-    print("[error] " + message)
 
 
 def create_socket():
@@ -45,7 +40,6 @@ def receive_readings(connection, address, callback):
             break
 
         received_text = received.decode('utf-8')
-        # print("-> " + x)
         if received_text == "{":
             tmp_json = "{"
         elif received_text == "}":
@@ -73,4 +67,4 @@ def start_server(port):
         receive_readings(connection, address, insert_reading)
 
 
-start_server(2389)
+start_server(port)
