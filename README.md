@@ -34,10 +34,18 @@ docker-compose up
 python3 server/server.py
 
 # Run splread in infinite loop and send readings from stdout to server
-sudo ./infinity-splread.sh | nc localhost 2389
+./infinity-splread.sh | nc localhost 2389
 ```
 Then visit http://localhost:13000/?orgId=1&search=open (use default admin/admin credentials) and watch graph.
 
 
+## Allow non-root users to access GM1356
+For Linux Mint/Ubuntu:
+```
+cp 1337-gm1356.rules /etc/udev/rules.d/1337-gm1356.rules
+```
+and reconnect device.
+
+
 ## Credits  
-Core part of this project (`splread.c` and `Makefile`) is based on https://github.com/pvachon/gm1356.
+Core part of this project (splread) is based on https://github.com/pvachon/gm1356.
