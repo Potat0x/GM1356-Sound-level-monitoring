@@ -5,7 +5,7 @@ while true
 do
     date >> "$0.log"
     printf "${yellow}starting splread${no_color}\n" >&2
-    ./splread -f -r 30-80 -i 150
+    ./splread -f -r 30-80 -i 150 | tee >(nc localhost 2389)
     sleep 1
     printf "\n" >&2
 done

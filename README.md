@@ -34,7 +34,7 @@ docker-compose up
 python3 server/server.py
 
 # Run splread in infinite loop and send readings from stdout to server
-./infinity-splread.sh | nc localhost 2389
+./splread-runner.sh
 ```
 Then visit http://localhost:13000/?orgId=1&search=open (use default admin/admin credentials) and watch graph.
 

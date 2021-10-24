@@ -44,10 +44,9 @@ def receive_readings(connection, address, callback):
             tmp_json = "{"
         elif received_text == "}":
             tmp_json = tmp_json + "}"
-            print("->" + tmp_json)
+            print("-> " + tmp_json)
             jp = json.loads(tmp_json)
             callback(jp["measured"], jp["timestamp"])
-            print("   " + str(jp))
             tmp_json = ""
         else:
             tmp_json = tmp_json + received_text
