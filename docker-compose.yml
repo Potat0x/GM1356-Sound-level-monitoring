@@ -10,9 +10,15 @@ services:
         - "13306:3306"
       volumes:
         - ./mysql-init:/docker-entrypoint-initdb.d
+        - mysql_storage:/var/lib/mysql
     
     gm1356_monitoring_grafana:
       image: grafana/grafana
       restart: on-failure
       ports:
         - "13000:3000"
+      volumes:
+        - grafana_storage:/var/lib/grafana
+volumes:
+  grafana_storage:
+  mysql_storage:
