@@ -16,6 +16,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <sys/time.h>
 #include <unistd.h>
 #include <wchar.h>
 
@@ -413,6 +414,13 @@ static void _parse_args(int argc, char *const *argv)
     }
 }
 
+static long long current_timestamp(void) {
+    struct timeval te;
+    gettimeofday(&te, NULL);
+    long long milliseconds = te.tv_sec*1000LL + te.tv_usec/1000;
+    return milliseconds;
+}
+
 int main(int argc, char *const *argv)
 {
     int ret = EXIT_FAILURE;
@@ -493,15 +501,14 @@ int main(int argc, char *const *argv)
                     range > 0x4 ? "UNKNOWN" : gm1356_range_str[range_v]
                    );
 #endif
-
             fprintf(stdout, "{\"measured\":%4.2f,\"mode\":\"%s\",\"freqMode\":\"%s\","
-                    "\"range\":\"%s\",\"datetime\":\"%04i-%02i-%02i %02i:%02i:%02i UTC\", \"timestamp\":\"%ld\"}\n",
+                    "\"range\":\"%s\",\"datetime\":\"%04i-%02i-%02i %02i:%02i:%02i UTC\", \"timestamp\":\"%lld\"}\n",
                     (double)deci_db/10.0,
                     flags & GM1356_FAST_MODE ? "fast" : "slow",
                     flags & GM1356_MEASURE_DBC ? "dBC" : "dBA",
                     range_v > 0x4 ? "UNKNOWN" : gm1356_range_str[range_v],
                     gmt->tm_year + 1900, gmt->tm_mon + 1, gmt->tm_mday, gmt->tm_hour, gmt->tm_min, gmt->tm_sec,
-                    time(NULL)
+                    current_timestamp()
                    );
             fflush(stdout);
         }

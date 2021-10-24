@@ -31,7 +31,7 @@
         "fieldConfig": {
           "defaults": {
             "color": {
-              "fixedColor": "#fa9900",
+              "fixedColor": "#00ffd2bf",
               "mode": "fixed",
               "seriesBy": "last"
             },
@@ -41,7 +41,7 @@
               "axisPlacement": "auto",
               "barAlignment": 0,
               "drawStyle": "line",
-              "fillOpacity": 32,
+              "fillOpacity": 40,
               "gradientMode": "hue",
               "hideFrom": {
                 "legend": false,
@@ -100,7 +100,7 @@
             "placement": "bottom"
           },
           "tooltip": {
-            "mode": "single"
+            "mode": "multi"
           }
         },
         "repeat": null,
@@ -109,8 +109,8 @@
             "format": "time_series",
             "group": [],
             "metricColumn": "none",
-            "rawQuery": false,
-            "rawSql": "SELECT\n  _timestamp AS \"time\",\n  _value\nFROM readings\nWHERE\n  $__unixEpochFilter(_timestamp)\nORDER BY _timestamp",
+            "rawQuery": true,
+            "rawSql": "SELECT\n  _timestamp AS \"time\",\n  _value\nFROM readings\nWHERE\n  $__unixEpochFilter(_timestamp/1000)\nORDER BY _timestamp;",
             "refId": "A",
             "select": [
               [
@@ -138,7 +138,7 @@
         "type": "timeseries"
       }
     ],
-    "refresh": "15s",
+    "refresh": "5s",
     "schemaVersion": 31,
     "style": "dark",
     "tags": [],
@@ -163,7 +163,7 @@
     },
     "timezone": "",
     "title": "GM1356 Sound level monitoring",
-    "version": 9
+    "version": 1
   },
   "overwrite": true
 }
