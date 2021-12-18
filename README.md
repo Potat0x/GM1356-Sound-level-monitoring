@@ -8,6 +8,10 @@ Set of tools that allows:
 Works with Benetech GM1356 sound level meter.
 
 
+![screenshot](https://i.imgur.com/2OUcgR0.png)
+[[more screenshots](https://imgur.com/a/tRbRP6c)]
+
+
 ## Requirements
 - Linux
 - Python 3, mysql-connector-python
