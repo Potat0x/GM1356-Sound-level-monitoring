@@ -5,7 +5,7 @@ Set of tools that allows:
 - save it into database
 - explore with Grafana
 
-Works with Benetech GM1356 sound level meter.
+Works with [Benetech GM1356](http://www.benetechco.net/en/products/gm1356.html) sound level meter.
 
 
 ![screenshot](https://i.imgur.com/2OUcgR0.png)
@@ -14,12 +14,12 @@ Works with Benetech GM1356 sound level meter.
 
 ## Requirements
 - Linux
-- Python 3, mysql-connector-python
+- Python 3, [mysql-connector-python](https://dev.mysql.com/doc/dev/connector-python/8.0/installation.html)
 - Docker
 - make
 - curl
 - netcat
-- libhidapi-dev https://github.com/libusb/hidapi
+- [libhidapi-dev](https://github.com/libusb/hidapi)
 
 
 ## Build and launch
@@ -46,7 +46,7 @@ python3 server/server.py
 # Run splread in infinite loop and send readings from stdout to server
 ./splread-runner.sh
 ```
-Then visit http://localhost:13000/?orgId=1&search=open (use default admin/admin credentials) and watch graph.
+Then visit http://localhost:13000/?orgId=1&search=open (use default admin/admin credentials) to watch graphs.
 
 
 ## Allow non-root users to access GM1356

@@ -29,8 +29,10 @@ def bind_socket(s, port):
         sys.exit()
 
 
-def receive_readings(connection, address, callback):
-    tmp_json = ""
+def receive_readings(connection, address, reading_received_callback):
+    reading_json_accumulator = ""
+    is_first_received_reading = True
+
     while True:
         received = connection.recv(1)
 
@@ -41,20 +43,26 @@ def receive_readings(connection, address, callback):
 
         received_text = received.decode('utf-8')
         if received_text == "{":
-            tmp_json = "{"
+            reading_json_accumulator = "{"
         elif received_text == "}":
-            tmp_json = tmp_json + "}"
-            print("-> " + tmp_json)
-            jp = json.loads(tmp_json)
-            callback(jp["measured"], jp["timestamp"])
-            tmp_json = ""
+            reading_json = reading_json_accumulator + "}"
+            reading_json_accumulator = ""
+
+            print("-> " + reading_json)
+            reading_properties = json.loads(reading_json)
+
+            if is_first_received_reading:
+                is_first_received_reading = False
+                reading_properties["measured"] = None
+
+            reading_received_callback(reading_properties["measured"], reading_properties["timestamp"])
         else:
-            tmp_json = tmp_json + received_text
+            reading_json_accumulator = reading_json_accumulator + received_text
 
 
-def start_server(port):
+def start_server(server_port):
     s = create_socket()
-    bind_socket(s, port)
+    bind_socket(s, server_port)
 
     log_info("start listening")
     s.listen()
